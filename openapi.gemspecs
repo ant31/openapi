@@ -1,9 +1,12 @@
 require 'rake'
+require 'date'
+require File.join(File.dirname(__FILE__), 'lib/openapi/version')
 
 Gem::Specification.new do |s|
   s.name = 'openapi'
-  s.version = '0.9.7'
-  s.date = '2015-01-05'
+  s.version = ::OpenAPI::VERSION
+  s.licenses = ['MIT']
+  s.date = Date.today.to_s
   s.summary = 'A Ruby library to build api wrapper'
   s.description = 'A lots of service expose a more or less complex API. The library provides common tasks to easily build a ruby wrapper'
   s.homepage = 'http://github.com/antlegrand/openapi'
