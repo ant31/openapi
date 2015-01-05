@@ -1,2 +1,6 @@
-class AuthError < StandardError
+module OpenAPI
+  module Exceptions
+    class AuthError < StandardError
+    end
+  end
 end

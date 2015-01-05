@@ -1,4 +1,5 @@
 require "active_support/core_ext/numeric/time"
+require 'openapi/exceptions'
 require 'openapi/utils'
 require 'openapi/client'
 require 'openapi/response'
@@ -7,6 +8,7 @@ require 'openapi/handlers'
 require 'openapi/route'
 require 'openapi/models'
 require 'openapi/auth_token'
+
 
 
 ## MOVE TO APP ""
