@@ -28,7 +28,12 @@ module OpenAPI
 
 
       def create_proc(klass, kmethod, path, options, client=nil)
-        proc = Proc.new() do |arg1=nil, arg2={}|
+        proc = Proc.new() do |arg1=nil, arg2={}, p=nil|
+          if p != nil
+            uri_path = p.clone()
+          else
+            uri_path = path.clone()
+          end
           if client == nil
             client = OpenAPI::Route.get_client()
           end
@@ -85,10 +90,10 @@ module OpenAPI
           if not params.has_key?(:client_id)
             params[:client_id] = client.client_id
           end
-          OpenAPI::Route.check_params(path, params, model)
+          OpenAPI::Route.check_params(uri_path, params, model)
 
           #1. soon.wrap = do_request opts[:body] => postjson
-          new_path = path.clone()
+          new_path = uri_path.clone()
           params.each do |key, v|
             r = Regexp.compile(":" + key.to_s)
             new_path.gsub!(r, v.to_s)
