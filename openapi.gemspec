@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'json', [ "~> 1.8.1" ]
   s.add_dependency 'activesupport', [ "~> 4" ]
-  s.add_dependency  'simplemodel', [ "~> 0.9"]
+  s.add_dependency 'simplemodel', [ "~> 0"]
 
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'fakeweb'

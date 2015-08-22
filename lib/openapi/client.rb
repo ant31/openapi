@@ -16,7 +16,7 @@ module OpenAPI
 
   module ClassMethods
     attr_accessor :application_key, :application_secret, :max_retry,
-    :logger, :request_timeout, :client_id, :site, :auth_token, :api_version, :api_methods, :use_ssl, :cache
+    :logger, :request_timeout, :client_id, :site, :auth_token, :api_methods, :use_ssl, :cache
 
     def api_methods
       @api_methods ||= []
@@ -37,15 +37,15 @@ module OpenAPI
         response = OpenAPI::Response.wrap(response)
         return response
       end
-    rescue Timeout::Error
+    rescue Timeout::Error => e
       unless logger.nil?
         logger.error "OpenAPI request timed out after #{request_timeout} seconds: [#{request.path} #{request.body}]"
       end
-      OpenAPI::Response.wrap(nil, :body => {:error => 'Request timeout'}, :code => '503')
+      raise e
     end
 
     def build_path(path, params=nil)
-      uri = URI("/#{api_v}/#{path.gsub(/:client_id/, client_id)}")
+      uri = URI("/#{path}")
       if params != nil
         uri.query = URI.encode_www_form(params)
       end
@@ -56,19 +56,21 @@ module OpenAPI
       raise NotImplementedError
     end
 
-    def do_request(http_method, path, options = {}, retried=0)
-      path = build_path(path, options[:params])
-
+    def do_request(http_method, path, params: {}, body: nil, headers: {}, options: {})
+      path = build_path(path, params)
       klass = Net::HTTP.const_get(http_method.to_s.capitalize)
       request = klass.new(path.to_s)
-      request.add_field "Content-Type", options[:content_type] || "application/json"
+      request.add_field "Content-Type", headers["Content-Type"] || "application/json"
       if !auth_token.nil? && options[:skip_auth] != true
         request.add_field "Authorization", (options[:access_token] || auth_token.token)
       end
-      request.add_field "Accept", options[:accept] || "application/json"
+      request.add_field "Accept", headers["Accept"] || "application/json"
+      headers.each do |h,v|
+        request.add_field h, v
+      end
       #Authorization: Basic dWJ1ZHUtYXBpOmZHWTI4aypOZTh2YzA=
       #Authorization: Bearer
-      request.body = options[:body] if options[:body]
+      request.body = body if body.present?
       response = call_api(request)
       return response
     end
@@ -103,9 +105,6 @@ module OpenAPI
       @request_timeout || 5.0
     end
 
-    def api_v()
-      @api_version || "v1"
-    end
 
     def logger
       @logger ||= OpenAPI.logger
@@ -124,7 +123,6 @@ module OpenAPI
     include ClassMethods
 
     def initialize(options={})
-      @api_version = options[:api_version] || OpenAPI.api_version
       @logger = options[:logger] || OpenAPI.logger
       @application_key = options[:application_key] || OpenAPI.application_key
       @application_secret = options[:application_secret] || OpenAPI.application_secret
