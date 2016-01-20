@@ -39,7 +39,7 @@ module OpenAPI
       end
     rescue Timeout::Error => e
       unless logger.nil?
-        logger.error "OpenAPI request timed out after #{request_timeout} seconds: [#{request.path} #{request.body}]"
+        logger.error "Request timed out after #{request_timeout} seconds: [#{request.path} #{request.body}]"
       end
       raise e
     end
@@ -61,15 +61,17 @@ module OpenAPI
       klass = Net::HTTP.const_get(http_method.to_s.capitalize)
       request = klass.new(path.to_s)
       request.add_field "Content-Type", headers["Content-Type"] || "application/json"
-      if !auth_token.nil? && options[:skip_auth] != true
-        request.add_field "Authorization", (options[:access_token] || auth_token.token)
+
+      if options[:skip_auth] != true && !auth_token.nil?
+        auth_token.headers.each do |k,v|
+          request.add_field k, v
+        end
       end
+
       request.add_field "Accept", headers["Accept"] || "application/json"
       headers.each do |h,v|
         request.add_field h, v
       end
-      #Authorization: Basic dWJ1ZHUtYXBpOmZHWTI4aypOZTh2YzA=
-      #Authorization: Bearer
       request.body = body if body.present?
       response = call_api(request)
       return response
@@ -85,7 +87,12 @@ module OpenAPI
     end
 
     def http_client
-      Net::HTTP.new(site, 443).tap{|http| http.use_ssl = true}
+      uri = URI(site)
+      client = Net::HTTP.new(uri.hostname, uri.port)
+      if uri.scheme == "https"
+        client.tap{|http| http.use_ssl = true}
+      end
+      return client
     end
 
     def log_request_and_response(request, response, time)
@@ -105,8 +112,7 @@ module OpenAPI
       @request_timeout || 5.0
     end
 
-
-    def logger
+   def logger
       @logger ||= OpenAPI.logger
     end
 

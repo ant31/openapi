@@ -12,13 +12,12 @@ Gem::Specification.new do |s|
   s.homepage = 'http://github.com/antlegrand/openapi'
   s.authors = ['Antoine Legrand']
   s.email = ['ant.legrand@gmail.com']
-  s.files = FileList['README.md', 'License', 'Changelog','Rakefile', 'lib/**/*.rb'].to_a
+  s.files = FileList['README.md', 'LICENSE', 'Changelog','Rakefile', 'lib/**/*.rb'].to_a
   s.test_files = FileList['spec/**/*.rb'].to_a
 
   s.add_dependency 'json', [ "~> 1.8.1" ]
   s.add_dependency 'activesupport', [ "~> 4" ]
-  s.add_dependency 'simplemodel', [ "~> 0"]
-
+  s.add_dependency 'hashie'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'fakeweb'
 

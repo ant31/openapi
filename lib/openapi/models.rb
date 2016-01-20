@@ -1,11 +1,7 @@
-require 'simplemodel'
-require 'active_model'
 $:.unshift(File.dirname(__FILE__))
 module OpenAPI
-  module Models
-    class << self
-      attr_accessor :active_record
-    end
-    autoload :Base, "models/base"
+  module Model
+    autoload :Response, "models/response"
+
   end
 end

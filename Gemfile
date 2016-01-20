@@ -1,11 +1,10 @@
 source 'http://rubygems.org'
 
-gem 'fakeweb'
 gem 'json'
-gem 'simplemodel'
-#gem 'httparty'
-#gem 'activemodel'
+gem 'hashie'
+
 group :development, :test do
+  gem 'fakeweb'
   gem 'rspec'
   gem 'rake'
 end

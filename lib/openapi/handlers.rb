@@ -2,7 +2,7 @@ module OpenAPI
   class Handler
     def self.failed(response)
       #      error =  OpenAPI::Models::Error.new().from_json(response.raw)
-      model =  OpenAPI::Handlers::Response.wrap(response.raw, response)
+      model = OpenAPI::Handlers::Response.wrap(response.raw, response)
       return model
     end
   end

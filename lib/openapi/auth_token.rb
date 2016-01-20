@@ -68,7 +68,7 @@ module OpenAPI
     end
 
     def headers
-      {header => header_format % @token}
+      {header => header_format % token}
     end
 
     def expires_in
