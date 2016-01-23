@@ -1,4 +1,5 @@
 require 'active_support'
+require 'cgi'
 module OpenAPI
   module Route
     # def static
@@ -12,7 +13,8 @@ module OpenAPI
           if part.start_with?(":")
             key = part[1..-1].to_sym
             if params.has_key?(key)
-              new_path.gsub!(Regexp.compile(":" + key.to_s), params[key].to_s)
+              new_path.gsub!(Regexp.compile(":" + key.to_s), CGI.escape(params[key].to_s))
+              params.delete(key)
             else
               # @todo raise real errors
               raise "Missing params: set '#{part}' to complete '#{path}' request"

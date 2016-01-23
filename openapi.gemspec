@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.files = FileList['README.md', 'LICENSE', 'Changelog','Rakefile', 'lib/**/*.rb'].to_a
   s.test_files = FileList['spec/**/*.rb'].to_a
 
-  s.add_dependency 'json', [ "~> 1.8.1" ]
-  s.add_dependency 'activesupport', [ "~> 4" ]
+  s.add_dependency 'json', [ "~> 1.8" ]
+  s.add_dependency 'activesupport', [ ">= 3" ]
   s.add_dependency 'hashie'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'fakeweb'
