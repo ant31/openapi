@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.date = Date.today.to_s
   s.summary = 'A Ruby library to build api wrapper'
   s.description = 'A lots of service expose a more or less complex API. The library provides common tasks to easily build a ruby wrapper'
-  s.homepage = 'http://github.com/antlegrand/openapi'
+  s.homepage = 'http://github.com/ant31/openapi'
   s.authors = ['Antoine Legrand']
   s.email = ['ant.legrand@gmail.com']
   s.files = FileList['README.md', 'LICENSE', 'Changelog','Rakefile', 'lib/**/*.rb'].to_a
