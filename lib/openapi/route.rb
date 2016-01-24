@@ -25,7 +25,16 @@ module OpenAPI
       end
 
       def create_proc(klass, kmethod, urlpath, opts, client=nil)
-        proc = Proc.new() do |params: {}, body: nil, headers: {}, path: nil|
+        proc = Proc.new() do |args={}|
+          headers = args[:headers] || {}
+          body = args[:body]
+          path = args[:path]
+          [:body, :path, :headers].each{|k| args.delete(k)}
+          if args.key?(:params)
+            params = args[:params] || {}
+          else
+            params = args
+          end
           client = OpenAPI::Route.get_client() if client.nil?
 
           if opts.has_key?(:default)
