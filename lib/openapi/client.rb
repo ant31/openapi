@@ -1,7 +1,6 @@
 require 'net/https'
 require 'time'
 require 'base64'
-require 'oauth2'
 
 require File.join(File.dirname(__FILE__), 'response')
 
